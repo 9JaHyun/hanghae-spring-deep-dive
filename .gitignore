@@ -1,0 +1,17 @@
+HELP.md
+
+# IntelliJ
+.idea/
+spartan-order.iml
+
+build/
+
+# Gradle
+.gradle/
+gradle/
+gradlew
+gradlew.bat
+settings.gradle
+
+# Key
+src/**/resources/application-**.yaml
