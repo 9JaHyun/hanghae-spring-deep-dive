@@ -7,19 +7,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.ClassOrderer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestClassOrder;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +30,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.annotation.Rollback;
 
 
+
+@Rollback
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Transactional
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class RestaurantIntegrationTest {
     @Autowired
@@ -53,6 +53,14 @@ class RestaurantIntegrationTest {
         headers.setContentType(MediaType.APPLICATION_JSON);
     }
 
+    @AfterAll
+    public void tearDown() {
+        restTemplate.getForObject("/restaurant/deleteAll",
+              Void.class);
+    }
+
+
+    @Rollback
     @Nested
     @DisplayName("음식점 3개 등록 및 조회")
     @Order(1)
@@ -63,7 +71,6 @@ class RestaurantIntegrationTest {
         void test1() throws JsonProcessingException {
             // given
             RestaurantDto restaurantRequest = RestaurantDto.builder()
-                  .id(null)
                   .name("쉐이크쉑 청담점")
                   .minOrderPrice(1_000)
                   .deliveryFee(0)
@@ -80,9 +87,7 @@ class RestaurantIntegrationTest {
 
             // then
             assertEquals(HttpStatus.CREATED, response.getStatusCode());
-
             RestaurantDto restaurantResponse = response.getBody();
-            System.out.println(restaurantResponse);
             assertNotNull(restaurantResponse);
             assertTrue(restaurantResponse.id > 0);
             assertEquals(restaurantRequest.name, restaurantResponse.name);
@@ -173,6 +178,8 @@ class RestaurantIntegrationTest {
                   RestaurantDto[].class
             );
 
+            System.out.println(Arrays.toString(response.getBody()));
+
             // then
             assertEquals(HttpStatus.OK, response.getStatusCode());
             RestaurantDto[] responseRestaurants = response.getBody();
@@ -192,6 +199,7 @@ class RestaurantIntegrationTest {
         }
     }
 
+    @Rollback
     @Order(2)
     @Nested
     @DisplayName("최소주문 가격")
@@ -278,6 +286,7 @@ class RestaurantIntegrationTest {
         }
     }
 
+    @Rollback
     @Order(3)
     @Nested
     @DisplayName("기본 배달비")

@@ -50,7 +50,6 @@ public class OrderService {
 
         orderRepository.save(order);
 
-        // 쿼리를 꼭 같이 해줘야 하나??
         Set<OrderMenuResponseDto> orderMenuResponseDtoList =
               createOrderMenuResponseDtoList(orderMenuList);
 
@@ -82,7 +81,7 @@ public class OrderService {
         return orderEntityList.stream()
               .map(entity -> {
                   Restaurant restaurant = restaurantRepository.findById(entity.getRestaurantId())
-                        .orElseThrow(() -> new IllegalArgumentException("잘못된 식당 ID입니다"));
+                        .orElseThrow(() -> new IllegalArgumentException("잘못된 식당 ID 입니다"));
 
                   Set<OrderMenuResponseDto> menus = createOrderMenuResponseDtoList(
                         entity.getOrderMenus());
@@ -119,5 +118,9 @@ public class OrderService {
         if (menuDto.quantity() > 100 || menuDto.quantity() < 1) {
             throw new IllegalArgumentException("주문 수량은 1~100 개만 가능합니다.");
         }
+    }
+
+    public void deleteAll() {
+        orderRepository.deleteAll();
     }
 }

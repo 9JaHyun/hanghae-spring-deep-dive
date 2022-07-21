@@ -7,9 +7,11 @@ import com.spartanorder.restaurant.exception.BadOrderPriceException;
 import com.spartanorder.restaurant.repository.RestaurantRepository;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 public class RestaurantService {
 
@@ -21,8 +23,8 @@ public class RestaurantService {
 
     @Transactional
     public RestaurantDto registerRestaurant(RestaurantDto dto) {
-        validateMinOrderPrice(dto.minOrderPrice());
         validateDeliveryFee(dto.deliveryFee());
+        validateMinOrderPrice(dto.minOrderPrice());
 
         Restaurant saveEntity = restaurantRepository.save(
               Restaurant.of(dto.name(), dto.minOrderPrice(), dto.deliveryFee()));
@@ -36,7 +38,7 @@ public class RestaurantService {
             throw new BadDeliveryFeeException("배달비는 100원 단위로 만들어주세요!");
         }
         if (deliveryFee > 10000 || deliveryFee < 0) {
-            throw new BadDeliveryFeeException("최소 주문 금액은 0원 ~ 10,000원 이하로 정해주세요!");
+            throw new BadDeliveryFeeException("배달비는 0원 ~ 10,000원 이하로 정해주세요!");
         }
     }
 
@@ -46,7 +48,7 @@ public class RestaurantService {
         }
 
         if (minOrderPrice > 100000 || minOrderPrice < 1000) {
-            throw new BadOrderPriceException("가격은 1000원 ~ 100,000원 사이로 정해주세요!");
+            throw new BadOrderPriceException("최소 주문 금액은 1000원 ~ 100,000원 사이로 정해주세요!");
         }
     }
 
@@ -57,5 +59,10 @@ public class RestaurantService {
               .map(restaurant -> new RestaurantDto(restaurant.getId(), restaurant.getName(),
                     restaurant.getMinOrderPrice(), restaurant.getDeliveryFee()))
               .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void deleteAll() {
+        restaurantRepository.deleteAll();
     }
 }

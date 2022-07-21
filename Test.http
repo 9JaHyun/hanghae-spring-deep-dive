@@ -1,0 +1,20 @@
+POST localhost:8080/restaurant/register
+Content-Type: application/json
+
+{
+  "name": "쉐이크쉑 청담점",
+  "minOrderPrice": 10000,
+  "deliveryFee": 0
+}
+
+###
+
+POST localhost:8080/restaurant/1/food/register
+Content-Type: application/json
+
+[
+  {
+  "name": "쉑버거 더블",
+  "price": 10900
+  }
+]

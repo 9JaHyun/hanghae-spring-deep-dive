@@ -11,16 +11,19 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Table;
 import lombok.Getter;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+@ToString
 @Getter
 @EntityListeners(AuditingEntityListener.class)
 @Table(indexes = {
-      @Index(columnList = "restaurant_id")
+      @Index(columnList = "restaurant_id"),
+      @Index(columnList = "name")
 })
 @Entity
 public class Menu {

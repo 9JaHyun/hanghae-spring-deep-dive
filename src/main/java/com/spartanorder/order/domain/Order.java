@@ -56,7 +56,7 @@ public class Order extends AbstractAggregateRoot<Order> {
 
     private Order(Long restaurantId, Set<OrderMenu> orderMenus) {
         this.restaurantId = restaurantId;
-        this.orderMenus = new HashSet<>(orderMenus);
+        this.orderMenus = orderMenus;
     }
 
     public void addOrderMenu(OrderMenu orderMenu) {

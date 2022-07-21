@@ -32,12 +32,18 @@ public class MenuController {
     }
 
     @GetMapping("/restaurant/{restaurantId}/foods")
-    public ResponseEntity<List<MenuResponseDto>> showMenuInRestaurant(@PathVariable Long restaurantId) {
+    public ResponseEntity<List<MenuResponseDto>> showMenuInRestaurant(
+          @PathVariable Long restaurantId) {
         List<MenuResponseDto> result = menuService.showMenuByRestaurantId(restaurantId);
 
         return ResponseEntity
               .status(HttpStatus.OK)
               .contentType(MediaType.APPLICATION_JSON)
               .body(result);
+    }
+
+    @GetMapping("/menu/deleteAll")
+    public void deleteAll() {
+        menuService.deleteAll();
     }
 }

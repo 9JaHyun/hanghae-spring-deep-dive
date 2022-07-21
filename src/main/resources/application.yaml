@@ -2,3 +2,6 @@ spring:
   profiles:
     active:
       DB
+
+server:
+  port: 8000

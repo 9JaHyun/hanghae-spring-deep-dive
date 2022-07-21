@@ -8,7 +8,7 @@ import java.util.Set;
 import javax.validation.constraints.NotNull;
 
 public record OrderDto(@JsonProperty("id") Long id,
-                       @JsonProperty("restaurantId") @NotNull @NotNull Long restaurantId,
+                       @JsonProperty("restaurantId") @NotNull Long restaurantId,
                        @JsonProperty("foods") @NotNull Set<OrderMenuDto> orderMenus) implements
       Serializable {
 

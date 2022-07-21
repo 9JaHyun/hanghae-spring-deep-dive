@@ -25,7 +25,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
       @Index(columnList = "name")
 })
 @EntityListeners(AuditingEntityListener.class)
-@Entity
+@Entity // JPA가 관리할 거야라고 선언
 public class Restaurant {
 
     @Id

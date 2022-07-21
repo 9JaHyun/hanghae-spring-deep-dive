@@ -38,4 +38,9 @@ public class OrderController {
               .contentType(MediaType.APPLICATION_JSON)
               .body(orderService.showOrders());
     }
+
+    @GetMapping("/orders/deleteAll")
+    public void deleteAll() {
+        orderService.deleteAll();
+    }
 }

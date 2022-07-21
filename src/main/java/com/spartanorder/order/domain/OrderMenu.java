@@ -20,12 +20,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 public class OrderMenu {
 
-    /**
-     * ID 매핑 방식 - 직접 넣어주기 setId(Long id) - DB에게 맡기기 -> @GeneratedValue - TABLE(worst) : ID만을 관리하는
-     * 테이블을 따로 생성 - IDENTITY     : AUTO INCREMENT -> 어느 DB에는 있고 어느 DB에는 없음. - SEQUENCE     : DB
-     * SEQUENCE 활용 => 거의 다 있음. - AUTO는 3중에 가장 어울리는 것을 선택.
-     */
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

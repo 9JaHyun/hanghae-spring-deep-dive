@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+// 선언 => 이 url로 접속을하면 이 일을 할거야
 @RestController
 public class RestaurantController {
 
@@ -24,7 +25,8 @@ public class RestaurantController {
 
     @PostMapping("/restaurant/register")
     public ResponseEntity<RestaurantDto> register(@Valid @RequestBody RestaurantDto requestDto) {
-        RestaurantDto result = restaurantService.registerRestaurant(requestDto);
+
+        RestaurantDto result = restaurantService.registerRestaurant(requestDto); // 음식점 등록
 
         return ResponseEntity.status(HttpStatus.CREATED)
               .contentType(MediaType.APPLICATION_JSON)
@@ -40,5 +42,10 @@ public class RestaurantController {
         return ResponseEntity.status(HttpStatus.OK)
               .contentType(MediaType.APPLICATION_JSON)
               .body(result);
+    }
+
+    @GetMapping("/restaurant/deleteAll")
+    public void deleteAll() {
+        restaurantService.deleteAll();
     }
 }

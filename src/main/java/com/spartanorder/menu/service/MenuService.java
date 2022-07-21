@@ -23,16 +23,15 @@ public class MenuService {
     @Transactional
     public void registerMenu(Long restaurantId, List<MenuDto> menuDto) {
         menuDto.forEach(dto -> {
-                  validateMenuName(restaurantId, dto.name());
-                  validatePrice(dto.price());
-                  menuRepository.save(Menu.of(dto.name(), dto.price(), restaurantId));
-              });
+            validateMenuName(restaurantId, dto.name());
+            validatePrice(dto.price());
+            menuRepository.save(Menu.of(dto.name(), dto.price(), restaurantId));
+        });
     }
 
     private void validateMenuName(Long restaurantId, String name) {
-        boolean checkDuplicateMenuName = menuRepository.findByRestaurantId(restaurantId)
-              .stream()
-              .anyMatch(menu -> menu.getName().equals(name));
+        boolean checkDuplicateMenuName =
+              menuRepository.findByRestaurantIdAndName(restaurantId, name).isPresent();
 
         if (checkDuplicateMenuName) {
             throw new DuplicateMenuName("이미 존재하는 메뉴이름입니다.");
@@ -53,8 +52,11 @@ public class MenuService {
     public List<MenuResponseDto> showMenuByRestaurantId(Long restaurantId) {
         return menuRepository.findByRestaurantId(restaurantId)
               .stream()
-              .map(menu -> new MenuResponseDto(menu.getId(), menu.getName(),
-                    menu.getPrice()))
+              .map(menu -> new MenuResponseDto(menu.getId(), menu.getName(), menu.getPrice()))
               .collect(Collectors.toList());
+    }
+
+    public void deleteAll() {
+        menuRepository.deleteAll();
     }
 }
